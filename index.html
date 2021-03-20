@@ -41,7 +41,6 @@
 </head>
 <body>
 	<h1 class="title">背單字</h1>
-	<input id = 'language' value="english">
 	<input type="button" value="changeLanguage" onclick="changeLanguage()">
 	<article>
 		<div class="mid">
@@ -62,7 +61,7 @@
 			var chooseClass;
 			var q = ["商品","離棄","展示品,展出","稠密的","多個的","區域,行政區","地標,里程碑","結束,結尾,結論","一定,當然","方面,層面","心理學的","沮喪,挫折","焦慮,不安","調查","有能力的,能勝任的","現象","優勢","吃喝,消耗","名聲","需要"];
 			var ans = ["goods","abandon","exhibit","dense","multiple","district","landmark","conclusion","definitely","aspect","psychological","frustration","anxiety","investigate","capable","phenomenon","advantage","consume","reputation","demand"];
-				var ansshow = '';
+			var ansshow = '';
 				for(var i = 0;i < ans.length;i ++){
 					if(i != ans.length-1){
 						ansshow += ans[i];
@@ -74,26 +73,26 @@
 					}
 				}
 				document.getElementById('choice').innerHTML = ansshow;
-			var change = new Boolean(false);
+			var change = 0;
 			function changeLanguage(){
-				if(document.getElementById('language').value == "chinese"){ //switchToCH
+				if(change % 2 != 0){ //switchToCH
 					for(var i = 0;i < ans.length;i ++){
 						var temp = ans[i];
 						ans[i] = q[i];
 						q[i] = temp;
 					}
-					change = true;
+					change++;
 					alert("U have changed the language to CH");
 				}
 				else{
-					if(change == true){ //switchBackToEN
-						for(var i = 0;i < ans.length;i ++){
+					 //switchBackToEN
+					for(var i = 0;i < ans.length;i ++){
 						var temp = ans[i];
 						ans[i] = q[i];
 						q[i] = temp;
 					}
 					alert("U have changed the language to EN");
-					}
+					change++;
 				}
 			}
 			function show(){
@@ -125,7 +124,7 @@
 				for(var i = 0;i < q.length;i ++){
 					mis.push(0);
 				}
-				if(!change){ 				//EN
+				if(change % 2 == 0){ 				//EN
 					let input;
 					loop1:
 					for(var i = 0;i < q.length; ++i){
@@ -139,6 +138,12 @@
 								break;
 							}
 							else if(input == "break"){
+								break loop1;
+							}
+							else if(input == "skipall"){
+								for(var i = 0;i < ans.length;i ++){
+									mis[i] = 1;
+								}
 								break loop1;
 							}
 						}
@@ -156,7 +161,7 @@
 							showerrQ += '<br>';
 						}
 					}
-					document.getElementById('showMistakeCt').innerHTML = 'mistake count : ' + ct + '/' + 20;
+					document.getElementById('showMistakeCt').innerHTML = 'mistake count : ' + ct + '/' + ans.length;
 					document.getElementById('err').innerHTML = "Q : " + '<br>' + showerrQ ;
 				}
 				else{				//CH
@@ -175,6 +180,12 @@
 							else if(input == "break"){
 								break loop1;
 							}
+							else if(input == "skipall"){
+								for(var i = 0;i < ans.length;i ++){
+									mis[i] = 1;
+								}
+								break loop1;
+							}
 						}
 					}
 					var showerrQ = '';
@@ -184,13 +195,13 @@
 							ct ++;
 							showerrQ += i+1;
 							showerrQ += '.  err = ';
-							showerrQ += q[i];
+							showerrQ += q[i]; 
 							showerrQ += ',  ans = ';
 							showerrQ += ans[i];
 							showerrQ += '<br>';
 						}
 					}
-					document.getElementById('showMistakeCt').innerHTML = 'mistake count : ' + ct + '/' + 20;
+					document.getElementById('showMistakeCt').innerHTML = 'mistake count : ' + ct + '/' + ans.length;
 					document.getElementById('err').innerHTML = "Q : " + '<br>' + showerrQ ;
 				}
 		}
